@@ -8,7 +8,7 @@ code = []
 #clear the terminal
 system("cls")
 
-#TODO add instructions on how to play the game
+#instructions on how to play the game
 puts "Welcome to Mastermind, a codebreaking game! In this game, you will attempt
 to guess the code created by the computer. This code is 4 numbers long and made
 up of digits from 1 to 6. After you guess a code, the game will provide you with
