@@ -5,6 +5,19 @@ code = []
 #use below code for debugging only
 #code = [1,2,3,4]
 
+#clear the terminal
+system("cls")
+
+#TODO add instructions on how to play the game
+puts "Welcome to Mastermind, a codebreaking game! In this game, you will attempt
+to guess the code created by the computer. This code is 4 numbers long and made
+up of digits from 1 to 6. After you guess a code, the game will provide you with
+feedback on how close your code was to being correct. This feedback is composed
+of two numbers. The first number indicates how many of your guessed numbers match
+and are in the correct positions. The second number shows you how many of your
+guessed numbers are in the code, but not the correct position. If you guess
+correctly within 10 tries, you win!
+Good luck!"
 
 round = 0
 #start the game already! Game lasts 10 rounds, uses round variable to track
@@ -74,6 +87,8 @@ guess_copy.each_with_index do |guess_value, guess_index|
   end
 end
 
+#TODO polish display for user
+
 #display guess and feedback for user.
 puts "#{guess} #{feedback}"
 
@@ -84,6 +99,7 @@ if feedback == [4,0]
 end
 
 #repeat
+round += 1
 end
 
 #display actual master code
