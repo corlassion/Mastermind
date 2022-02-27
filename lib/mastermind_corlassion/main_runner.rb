@@ -3,6 +3,16 @@
 module MastermindCorlassion
   class MainRunner
 
+  INSTRUCTIONS = "Welcome to Mastermind, a codebreaking game! In this game, you will attempt
+to guess the code created by the computer. This code is 4 numbers long and made
+up of digits from 1 to 6. After you guess a code, the game will provide you with
+feedback on how close your code was to being correct. This feedback is composed
+of two numbers. The first number indicates how many of your guessed numbers match
+and are in the correct positions. The second number shows you how many of your
+guessed numbers are in the code, but not the correct position. If you guess
+correctly within 10 tries, you win!
+Good luck!"
+
     class << self
       def run
         new.run
@@ -10,46 +20,52 @@ module MastermindCorlassion
     end
 
     def initialize
-
-    end
-
-    def run
       #generate 4 digit master code
-      code = []
-      4.times { code += [rand(5) + 1] }
+      @code = []
+      4.times { @code += [rand(5) + 1] }
 
       #use below code for debugging only
       #code = [1,2,3,4]
 
+    end
+
+    def run
       #clear the terminal
       system("cls")
 
       #instructions on how to play the game
-      puts "Welcome to Mastermind, a codebreaking game! In this game, you will attempt
-      to guess the code created by the computer. This code is 4 numbers long and made
-      up of digits from 1 to 6. After you guess a code, the game will provide you with
-      feedback on how close your code was to being correct. This feedback is composed
-      of two numbers. The first number indicates how many of your guessed numbers match
-      and are in the correct positions. The second number shows you how many of your
-      guessed numbers are in the code, but not the correct position. If you guess
-      correctly within 10 tries, you win!
-      Good luck!"
+      puts INSTRUCTIONS
 
       round = 0
       #start the game already! Game lasts 10 rounds, uses round variable to track
       until round ==10 do
 
-      code_copy = []
-      guess = []
-      guess_copy = []
-      feedback = [0,0]
+        #request input from user and sanitize it
+        guess = get_input
 
-      #copy the master code so we can make changes during feedback
-      code.each do |value|
-        code_copy += [value]
+        feedback = feedback_logic(guess, @code)
+        #TODO instead push to new row in history
+
+        #TODO polish display for user
+
+        #display guess and feedback for user.
+        puts "#{guess} #{feedback}"
+
+        #is the guess correct?
+        if feedback == [4,0]
+          puts "Congratulations! You win!"
+          break
+        end
+
+        #repeat
+        round += 1
       end
 
-      #request input from user and sanitize it
+      #display actual master code
+      puts "The actual code was #{@code}"
+    end
+
+    def get_input
       puts "Please type four numerals from 1 to 6"
       input = gets.chomp.chars
       new_input = []
@@ -60,31 +76,30 @@ module MastermindCorlassion
       end
       #if there are too few digits, add 0s to fill the array to 4 units
       new_input += [0,0,0,0]
-      guess = new_input[0..3]
+      new_input[0..3]
+    end
 
-      #copy the guess so we can make changes during feedback
-      guess.each do |value|
-        guess_copy += [value]
-      end
+    def feedback_logic(guess, code)
 
-      =begin
-      go through each index value. For each match, add a "b" to the
-      feedback array. Then set both the values to 0 so we know we've
-      already considered that match
-      =end
+      feedback = [0,0]
+      guess_copy = guess.dup
+      code_copy = code.dup
+      #TODO consider renaming feedback elements more functionally
+
+      #go through each index value. For each match, add a "b" to the
+      #feedback array. Then set both the values to 0 so we know we've
+      #already considered that match
       guess_copy.each_with_index do |value, index|
-      	if code_copy[index] == value
-      		feedback[0] += 1
-      		code_copy[index] = 0
-      		guess_copy[index] = 0
-      	end
+        if code_copy[index] == value
+          feedback[0] += 1
+          code_copy[index] = 0
+          guess_copy[index] = 0
+        end
       end
 
-      =begin
-      Go through both arrays. Skip any 0s. If there is a match, add
-      a "w" to the feedback array. Then set both values to 0 so we
-      don't reevaluate it
-      =end
+      #Go through both arrays. Skip any 0s. If there is a match, add
+      #a "w" to the feedback array. Then set both values to 0 so we
+      #don't reevaluate it
       guess_copy.each_with_index do |guess_value, guess_index|
         if guess_value == 0
           next
@@ -95,7 +110,7 @@ module MastermindCorlassion
           end
           if guess_value == code_value
             feedback[1] += 1
-      	      	guess_copy[guess_index] = 0
+               guess_copy[guess_index] = 0
                 code_copy[code_index] = 0
                 code_value = 0
                 guess_value = 0
@@ -103,23 +118,9 @@ module MastermindCorlassion
         end
       end
 
-      #TODO polish display for user
+      feedback
 
-      #display guess and feedback for user.
-      puts "#{guess} #{feedback}"
-
-      #is the guess correct?
-      if feedback == [4,0]
-        puts "Congratulations! You win!"
-        break
-      end
-
-      #repeat
-      round += 1
-      end
-
-      #display actual master code
-      puts "Actual code is #{code}"
     end
+
   end
 end
