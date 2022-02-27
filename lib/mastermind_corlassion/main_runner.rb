@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Mastermind
+module MastermindCorlassion
   class MainRunner
 
     class << self
