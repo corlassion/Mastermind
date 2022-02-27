@@ -1,0 +1,3 @@
+example_id                           | status | run_time     |
+------------------------------------ | ------ | ------------ |
+./spec/unit/main_runner_spec.rb[1:1] | passed | 20.1 seconds |

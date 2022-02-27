@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "pry"
 
 module MastermindCorlassion
   class MainRunner
@@ -75,9 +76,6 @@ Good luck!"
     end
 
     def feedback_logic(guess, code)
-      #puts code.inspect
-      #puts guess.inspect
-
       unique_totals_by_value = {}
       unique_matches_by_value = {}
 
