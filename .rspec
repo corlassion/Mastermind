@@ -1,0 +1,2 @@
+--format RspecJunitFormatter
+--out spec/results/report.xml
