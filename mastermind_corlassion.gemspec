@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Stephen Michal"]
   spec.email         = ["corlassion@gmail.com"]
 
-  spec.summary       = ""
-  spec.description   = ""
+  spec.summary       = "Remake of Mastermind game for ruby practice"
+  spec.description   = spec.summary
   spec.homepage      = "https://github.com/corlassion/mastermind_corlassion"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
