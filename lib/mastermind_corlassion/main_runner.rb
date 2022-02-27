@@ -25,7 +25,7 @@ Good luck!"
       4.times { @code += [rand(5) + 1] }
 
       #use below code for debugging only
-      #code = [1,2,3,4]
+      #@code = [1,2,1,1]
 
     end
 
@@ -66,60 +66,39 @@ Good luck!"
     end
 
     def get_input
-      puts "Please type four numerals from 1 to 6"
-      input = gets.chomp.chars
-      new_input = []
-      input.each do |value|
-        if value.to_i >= 1 and value.to_i <= 6
-          new_input << value.to_i
-        end
+      input = []
+      until input.length==4
+        puts "Please type four numerals from 1 to 6"
+        input = gets.chomp.tr('^1-6', '').chars.map(&:to_i)
       end
-      #if there are too few digits, add 0s to fill the array to 4 units
-      new_input += [0,0,0,0]
-      new_input[0..3]
+      input
     end
 
     def feedback_logic(guess, code)
+      #puts code.inspect
+      #puts guess.inspect
 
-      feedback = [0,0]
-      guess_copy = guess.dup
-      code_copy = code.dup
-      #TODO consider renaming feedback elements more functionally
+      unique_totals_by_value = {}
+      unique_matches_by_value = {}
 
-      #go through each index value. For each match, add a "b" to the
-      #feedback array. Then set both the values to 0 so we know we've
-      #already considered that match
-      guess_copy.each_with_index do |value, index|
-        if code_copy[index] == value
-          feedback[0] += 1
-          code_copy[index] = 0
-          guess_copy[index] = 0
+      guess.each_with_index do |value,index|
+        if code[index] == value
+          unique_matches_by_value[value] ||= 0
+          unique_matches_by_value[value] += 1
+        end
+        if (values_total = code.count(value)) > 0
+          unique_totals_by_value[value] ||= 0
+          unique_totals_by_value[value] += 1 if unique_totals_by_value[value] < values_total
         end
       end
 
-      #Go through both arrays. Skip any 0s. If there is a match, add
-      #a "w" to the feedback array. Then set both values to 0 so we
-      #don't reevaluate it
-      guess_copy.each_with_index do |guess_value, guess_index|
-        if guess_value == 0
-          next
-        end
-        code_copy.each_with_index do |code_value, code_index|
-          if code_value == 0 or guess_value == 0
-            next
-          end
-          if guess_value == code_value
-            feedback[1] += 1
-               guess_copy[guess_index] = 0
-                code_copy[code_index] = 0
-                code_value = 0
-                guess_value = 0
-          end
-        end
-      end
+      close = unique_totals_by_value.map do |value, total|
+        result = total - (unique_matches_by_value[value]||0)
+        [result,0].max
+      end.sum
+      match = unique_matches_by_value.values.sum
 
-      feedback
-
+      [match, close]
     end
 
   end
