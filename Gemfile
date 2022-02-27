@@ -4,3 +4,6 @@ source "https://rubygems.org"
 gemspec
 
 gem "rake", "~> 12.0"
+gem 'pry-byebug'
+gem 'pry', '~> 0.12'
+gem 'rspec', '~> 3.4'
